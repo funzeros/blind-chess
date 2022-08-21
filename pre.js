@@ -165,23 +165,15 @@
             if (response.status > 399) {
               throw Error(`资源加载出错${response.status}`);
             }
-            switch (type) {
-              case "application/javascript; charset=UTF-8":
-                {
-                  const o = script(null, { type: "text/javascript" });
-                  o.textContent = text;
-                  document.body.appendChild(o);
-                }
-                break;
-              case "text/css; charset=UTF-8":
-                {
-                  const o = style(null, { type: "text/css" });
-                  o.textContent = text;
-                  document.head.appendChild(o);
-                }
-                break;
-              default:
-                break;
+            if (type.startsWith("application/javascript")) {
+              const o = script(null, { type: "text/javascript" });
+              o.textContent = text;
+              document.body.appendChild(o);
+            }
+            if (type.startsWith("text/css")) {
+              const o = style(null, { type: "text/css" });
+              o.textContent = text;
+              document.head.appendChild(o);
             }
             HAS_SYNC_IMPORT_MAP.set(path, true);
             resolve(true);
